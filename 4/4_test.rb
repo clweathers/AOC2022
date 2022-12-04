@@ -1,7 +1,7 @@
 require "test/unit"
 require_relative "4.rb"
 
-class ForTest < Test::Unit::TestCase
+class FourTest < Test::Unit::TestCase
     def test_a_sample
         answer = number_of_pairs_with_full_overlaps("sample.txt")
         assert_equal(answer, 2)
