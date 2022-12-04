@@ -48,5 +48,7 @@ def priorities_sum_b(filename)
     return priorities_sum
 end
 
-sum = priorities_sum_b("input.txt")
-puts sum
+if __FILE__ == $0
+    sum = priorities_sum_b("input.txt")
+    puts sum
+end
