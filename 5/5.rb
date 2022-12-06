@@ -33,7 +33,7 @@ def crates_on_top(stacks)
     return crates_on_top
 end
 
-def rearranged_stacks(stacks, moves)
+def rearranged_stacks(stacks, moves, move_multiple_crates_at_once = false)
     stacks = stacks.clone
 
     moves.each do |move|
@@ -44,10 +44,16 @@ def rearranged_stacks(stacks, moves)
         start_stack = stacks[start_stack_index]
         end_stack = stacks[end_stack_index]
 
+        crates_to_add = []
+
         number_of_boxes.times do
             crate = start_stack.pop
-            end_stack << crate
+            crates_to_add << crate
         end
+
+        crates_to_add.reverse! if move_multiple_crates_at_once
+
+        end_stack.concat(crates_to_add)
     end
 
     return stacks
@@ -63,20 +69,15 @@ def character_index_for_stack_index(stack_index)
     return character_index
 end
 
-def rearranged_crates_on_top(filename)
+def rearranged_crates_on_top(filename, move_multiple_crates_at_once = false)
     stacks, moves = stacks_and_moves(filename)
-    rearranged_stacks = rearranged_stacks(stacks, moves)
+    rearranged_stacks = rearranged_stacks(stacks, moves, move_multiple_crates_at_once)
     rearranged_crates_on_top = crates_on_top(rearranged_stacks)
+    rearranged_crates_on_top = rearranged_crates_on_top.join
     return rearranged_crates_on_top
 end
 
-def rearranged_crates_on_top_string(filename)
-    rearranged_crates_on_top = rearranged_crates_on_top(filename)
-    rearranged_crates_on_top_string = rearranged_crates_on_top.join
-    return rearranged_crates_on_top_string
-end
-
 if __FILE__ == $0
-    rearranged_crates_on_top_string = rearranged_crates_on_top_string("input.txt")
-    puts rearranged_crates_on_top_string
+    rearranged_crates_on_top = rearranged_crates_on_top("input.txt", true)
+    puts rearranged_crates_on_top
 end
