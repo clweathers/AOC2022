@@ -110,7 +110,11 @@ end
 if __FILE__ == $0
     lines = File.readlines("input.txt", chomp: true)
     filesystem = filesystem_from_lines(lines)
-    folders = filesystem.folders.filter {|folder| folder.size <= 100000}
-    size = folders.map(&:size).reduce(&:+)
-    puts size
+    maximum_capacity = 70000000
+    required_capacity = 30000000
+    free_capacity = maximum_capacity - filesystem.size
+    capacity_to_free = required_capacity - free_capacity
+    folders = filesystem.folders.filter {|folder| folder.size >= capacity_to_free}
+    smallest_folder = folders.min {|a, b| a.size <=> b.size}
+    p smallest_folder.size
 end

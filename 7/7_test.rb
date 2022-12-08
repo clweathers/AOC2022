@@ -24,4 +24,30 @@ class SevenTest < Test::Unit::TestCase
         size = folders.map(&:size).reduce(&:+)
         assert_equal(size, 1232307)
     end
+
+    def test_sample_b()
+        lines = File.readlines("sample.txt", chomp: true)
+        filesystem = filesystem_from_lines(lines)
+        maximum_capacity = 70000000
+        required_capacity = 30000000
+        free_capacity = maximum_capacity - filesystem.size
+        capacity_to_free = required_capacity - free_capacity
+        folders = filesystem.folders.filter {|folder| folder.size >= capacity_to_free}
+        smallest_folder = folders.min {|a, b| a.size <=> b.size}
+        size = smallest_folder.size
+        assert_equal(size, 24933642)
+    end
+
+    def test_input_b()
+        lines = File.readlines("input.txt", chomp: true)
+        filesystem = filesystem_from_lines(lines)
+        maximum_capacity = 70000000
+        required_capacity = 30000000
+        free_capacity = maximum_capacity - filesystem.size
+        capacity_to_free = required_capacity - free_capacity
+        folders = filesystem.folders.filter {|folder| folder.size >= capacity_to_free}
+        smallest_folder = folders.min {|a, b| a.size <=> b.size}
+        size = smallest_folder.size
+        assert_equal(size, 7268994)
+    end
 end
