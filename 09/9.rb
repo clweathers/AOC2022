@@ -14,6 +14,10 @@ class Point
         hash = (@x * 100) + (@y * 1000)
     end
 
+    def to_s
+        "(#{@x}, #{@y})"
+    end
+
     def is_touching(point)
         x_distance = (@x - point.x).abs
         y_distance = (@y - point.y).abs
@@ -27,6 +31,10 @@ class SnakeSection
     def initialize()
         @current_point = Point.new(0, 0)
         @previous_points = []
+    end
+
+    def to_s
+        @current_point.to_s
     end
 
     def is_touching(section)
@@ -45,8 +53,15 @@ class SnakeSection
         @current_point = point
     end
 
-    def previous_point
-        previous_point = @previous_points.last || @current_point
+    def move_towards_segment(segment)
+        x, y = 0, 0
+
+        x = 1 if segment.current_point.x > @current_point.x
+        x = -1 if segment.current_point.x < @current_point.x
+        y = 1 if segment.current_point.y > @current_point.y
+        y = -1 if segment.current_point.y < @current_point.y
+
+        move(x, y)
     end
 
     def all_points
@@ -76,25 +91,30 @@ def direction_and_distance_from_command(command)
     return direction, distance
 end
 
-def points_tail_visited(filename)
-    head = SnakeSection.new()
-    tail = SnakeSection.new()
+def points_tail_visited(filename, snake_length)
+    snake_sections = Array.new(snake_length) {SnakeSection.new()}
 
     commands = commands_from_file(filename)
     commands.each do |command|
         direction, distance = direction_and_distance_from_command(command)
         x, y = xy_unit_from_direction(direction)
         distance.times do
+            head = snake_sections[0]
             head.move(x, y)
-            tail.move_to_point(head.previous_point) if !head.is_touching(tail)
-        end        
+            snake_sections.each_cons(2) do |snake_section_pair|
+                first_snake_section = snake_section_pair[0]
+                second_snake_section = snake_section_pair[1]
+                second_snake_section.move_towards_segment(first_snake_section) if !first_snake_section.is_touching(second_snake_section)
+            end
+        end
     end
 
+    tail = snake_sections.last
     points_tail_visited = tail.all_points
 end
 
 if __FILE__ == $0
-    points_tail_visited = points_tail_visited("input.txt")
+    points_tail_visited = points_tail_visited("input.txt", 10)
     number_of_unique_points_tail_visited = points_tail_visited.uniq.size
     puts number_of_unique_points_tail_visited
 end

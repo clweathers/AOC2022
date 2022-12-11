@@ -37,14 +37,26 @@ class NineTest < Test::Unit::TestCase
     end
 
     def test_sample_a
-        points_tail_visited = points_tail_visited("sample.txt")
+        points_tail_visited = points_tail_visited("sample.txt", 2)
         number_of_unique_points_tail_visited = points_tail_visited.uniq.size
         assert_equal(13, number_of_unique_points_tail_visited)
     end
 
     def test_input_a
-        points_tail_visited = points_tail_visited("input.txt")
+        points_tail_visited = points_tail_visited("input.txt", 2)
         number_of_unique_points_tail_visited = points_tail_visited.uniq.size
         assert_equal(6044, number_of_unique_points_tail_visited)
+    end
+
+    def test_sample_b
+        points_tail_visited = points_tail_visited("sample.txt", 10)
+        number_of_unique_points_tail_visited = points_tail_visited.uniq.size
+        assert_equal(1, number_of_unique_points_tail_visited)
+    end
+
+    def test_input_b
+        points_tail_visited = points_tail_visited("input.txt", 10)
+        number_of_unique_points_tail_visited = points_tail_visited.uniq.size
+        assert_equal(2384, number_of_unique_points_tail_visited)
     end
 end
