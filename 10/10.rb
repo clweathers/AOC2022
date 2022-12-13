@@ -34,11 +34,26 @@ def register_history(filename)
     return register_history
 end
 
+# Part one
+# if __FILE__ == $0
+#     register_history = register_history("input.txt")
+#     signal_strengths = register_history.map.with_index {|register_value, index| register_value * index}
+#     interesting_signal_indices = [20, 60, 100, 140, 180, 220]
+#     interesting_signal_strengths = interesting_signal_indices.map {|index| signal_strengths[index]}
+#     interesting_signal_strengths_sum = interesting_signal_strengths.sum
+#     puts interesting_signal_strengths_sum
+# end
+
+# Part two
 if __FILE__ == $0
     register_history = register_history("input.txt")
-    signal_strengths = register_history.map.with_index {|register_value, index| register_value * index}
-    interesting_signal_indices = [20, 60, 100, 140, 180, 220]
-    interesting_signal_strengths = interesting_signal_indices.map {|index| signal_strengths[index]}
-    interesting_signal_strengths_sum = interesting_signal_strengths.sum
-    puts interesting_signal_strengths_sum
+    register_history.shift
+    characters = register_history.map.with_index do |register_value, pixel_position|
+        sprite_positions = [register_value - 1, register_value, register_value + 1]
+        pixel_is_lit = sprite_positions.include?(pixel_position % 40)
+        puts "CRT draw position #{pixel_position}, register: #{register_value}, sprite: #{sprite_positions}"
+        character = (pixel_is_lit ? "#" : ".")
+    end
+
+    characters.each_slice(40) {|line_characters| puts line_characters.join}
 end
